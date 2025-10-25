@@ -10,7 +10,7 @@ const uploadJson = document.getElementById("uploadJson");
 // --- Tâches stockées localement ---
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-// --- Fonction pour afficher tâches + commentaires ---
+// --- Affichage sidebar avec clic + survol ---
 function renderTasks() {
   tasksContainer.innerHTML = "";
   tasks
@@ -20,15 +20,23 @@ function renderTasks() {
       const li = document.createElement("li");
       li.className = "task-item";
 
+      // Texte tâche
       const taskText = document.createElement("div");
       taskText.className = "task-text";
       taskText.textContent = task.text + " (ajoutée le " + task.date.split("T")[0] + ")";
-      li.appendChild(taskText);
+      taskText.style.cursor = "pointer";
 
-      // Commentaires
-      const commentSection = document.createElement("div");
-      commentSection.className = "comment-section";
+      // Tooltip pour survol des commentaires
+      if(task.comments?.length){
+        taskText.title = task.comments.map(c=>"• "+c).join("\n");
+      }
 
+      // Bloc commentaire caché initialement
+      const commentBlock = document.createElement("div");
+      commentBlock.className = "comment-section";
+      commentBlock.style.display = "none";
+
+      // Liste commentaires
       const commentList = document.createElement("ul");
       commentList.className = "comment-list";
       if(task.comments?.length){
@@ -38,9 +46,9 @@ function renderTasks() {
           commentList.appendChild(cLi);
         });
       }
-      commentSection.appendChild(commentList);
+      commentBlock.appendChild(commentList);
 
-      // Input commentaire
+      // Input + bouton ajout commentaire
       const commentInputDiv = document.createElement("div");
       commentInputDiv.className = "comment-input";
       const commentInput = document.createElement("input");
@@ -61,9 +69,16 @@ function renderTasks() {
 
       commentInputDiv.appendChild(commentInput);
       commentInputDiv.appendChild(commentBtn);
-      commentSection.appendChild(commentInputDiv);
+      commentBlock.appendChild(commentInputDiv);
 
-      li.appendChild(commentSection);
+      li.appendChild(taskText);
+      li.appendChild(commentBlock);
+
+      // Clic pour afficher / cacher le bloc commentaire
+      taskText.addEventListener("click", ()=>{
+        commentBlock.style.display = commentBlock.style.display === "none" ? "flex" : "none";
+      });
+
       tasksContainer.appendChild(li);
     });
 }
@@ -100,7 +115,6 @@ const prompts = [
   {id:"categoriser", label:"Catégories", text:"Range ces tâches dans des catégories logiques :"}
 ];
 
-// --- Créer boutons prompts ---
 prompts.forEach(p=>{
   const btn = document.createElement("button");
   btn.textContent = p.label;
