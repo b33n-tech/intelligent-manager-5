@@ -10,15 +10,58 @@ const uploadJson = document.getElementById("uploadJson");
 // --- Tâches stockées localement ---
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-// --- Afficher les tâches ---
+// --- Afficher les tâches et leurs commentaires ---
 function renderTasks() {
   tasksContainer.innerHTML = "";
   tasks
     .slice()
     .sort((a,b)=> new Date(a.date) - new Date(b.date))
-    .forEach(task=>{
+    .forEach((task, index)=>{
       const li = document.createElement("li");
-      li.textContent = task.text + " (ajoutée le " + task.date.split("T")[0] + ")";
+      li.className = "task-item";
+
+      const taskText = document.createElement("div");
+      taskText.className = "task-text";
+      taskText.textContent = task.text + " (ajoutée le " + task.date.split("T")[0] + ")";
+      li.appendChild(taskText);
+
+      // Section commentaires
+      const commentSection = document.createElement("div");
+      commentSection.className = "comment-section";
+
+      const commentList = document.createElement("ul");
+      commentList.className = "comment-list";
+      task.comments?.forEach(c=> {
+        const cLi = document.createElement("li");
+        cLi.textContent = c;
+        commentList.appendChild(cLi);
+      });
+      commentSection.appendChild(commentList);
+
+      // Input commentaire
+      const commentInputDiv = document.createElement("div");
+      commentInputDiv.className = "comment-input";
+      const commentInput = document.createElement("input");
+      commentInput.placeholder = "Ajouter un commentaire…";
+      const commentBtn = document.createElement("button");
+      commentBtn.textContent = "+";
+
+      commentBtn.addEventListener("click", ()=>{
+        const val = commentInput.value.trim();
+        if(val!==""){
+          if(!task.comments) task.comments=[];
+          task.comments.push(val);
+          localStorage.setItem("tasks", JSON.stringify(tasks));
+          commentInput.value="";
+          renderTasks();
+        }
+      });
+
+      commentInputDiv.appendChild(commentInput);
+      commentInputDiv.appendChild(commentBtn);
+      commentSection.appendChild(commentInputDiv);
+
+      li.appendChild(commentSection);
       tasksContainer.appendChild(li);
     });
 }
@@ -27,7 +70,7 @@ function renderTasks() {
 addBtn.addEventListener("click", () => {
   const text = taskInput.value.trim();
   if(text !== "") {
-    tasks.push({text, date: new Date().toISOString()});
+    tasks.push({text, date: new Date().toISOString(), comments: []});
     localStorage.setItem("tasks", JSON.stringify(tasks));
     taskInput.value = "";
     renderTasks();
@@ -48,7 +91,7 @@ archiveBtn.addEventListener("click", () => {
   URL.revokeObjectURL(url);
 });
 
-// --- Prompts intégrés avec labels courts ---
+// --- Prompts intégrés ---
 const prompts = [
   {id:"planifier", label:"Plan", text:"Transforme ces tâches en plan structuré étape par étape :"},
   {id:"prioriser", label:"Priorité", text:"Classe ces tâches par ordre de priorité et urgence :"},
@@ -58,15 +101,19 @@ const prompts = [
 // --- Créer boutons prompts ---
 prompts.forEach(p=>{
   const btn = document.createElement("button");
-  btn.textContent = p.label; // label court
+  btn.textContent = p.label;
   btn.addEventListener("click", ()=>{
-    // Copier prompt + tâches
-    const combined = p.text + "\n\n" + tasks.map(t=>"- "+t.text).join("\n");
+    // Combiner tâche + commentaires
+    const combined = p.text + "\n\n" + tasks.map(t=>{
+      let str = "- "+t.text;
+      if(t.comments?.length){
+        str += "\n  Commentaires :\n" + t.comments.map(c=>"    - "+c).join("\n");
+      }
+      return str;
+    }).join("\n");
     navigator.clipboard.writeText(combined).then(()=>{
       copiedMsg.style.display="block";
       setTimeout(()=>copiedMsg.style.display="none",2000);
-
-      // Ouvre ChatGPT dans un nouvel onglet
       window.open("https://chatgpt.com/", "_blank");
     });
   });
@@ -84,7 +131,10 @@ uploadJson.addEventListener("change", event=>{
         const data = JSON.parse(e.target.result);
         if(Array.isArray(data)){
           data.forEach(item=>{
-            if(item.text && item.date) tasks.push({text:item.text, date:item.date});
+            if(item.text && item.date){
+              if(!item.comments) item.comments=[];
+              tasks.push({text:item.text, date:item.date, comments:item.comments});
+            }
           });
           localStorage.setItem("tasks", JSON.stringify(tasks));
           renderTasks();
