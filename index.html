@@ -13,12 +13,19 @@
   </header>
 
   <main>
-    <!-- Section input + boutons -->
+    <!-- Section gauche : input + boutons + prompts + upload -->
     <section class="input-section">
       <input type="text" id="taskInput" placeholder="Ex : appeler le fournisseur, revoir le doc...">
+
       <div class="buttons-row">
         <button id="addBtn">➕ Ajouter</button>
         <button id="archiveBtn">📦 Archiver</button>
+      </div>
+
+      <!-- Panel Prompts sous les boutons -->
+      <div class="prompt-panel">
+        <h2>⚡ Prompts</h2>
+        <div id="promptsContainer"></div>
       </div>
 
       <div class="upload-panel">
@@ -27,13 +34,8 @@
       </div>
     </section>
 
-    <!-- Sidebar : Prompts + Historique -->
+    <!-- Sidebar droite : Historique des tâches -->
     <aside class="task-list">
-      <div class="prompt-panel">
-        <h2>⚡ Prompts</h2>
-        <div id="promptsContainer"></div>
-      </div>
-
       <h2>📝 Historique des tâches</h2>
       <ul id="tasksContainer"></ul>
     </aside>
