@@ -101,9 +101,54 @@ main {
   margin: 0;
 }
 
-.task-list li {
+.task-item {
   padding: 8px;
   border-bottom: 1px solid #eee;
+}
+
+.task-item .task-text {
+  font-weight: bold;
+}
+
+.comment-section {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.comment-list {
+  margin-left: 10px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.comment-list li {
+  margin-bottom: 2px;
+}
+
+.comment-input {
+  display: flex;
+  gap: 5px;
+}
+
+.comment-input input {
+  flex: 1;
+  padding: 5px;
+}
+
+.comment-input button {
+  padding: 5px 8px;
+  cursor: pointer;
+  border: none;
+  background: #ff7f50;
+  color: white;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+.comment-input button:hover {
+  background: #e0693f;
 }
 
 .copied-msg {
