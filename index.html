@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Dashboard Tâches</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🧠 Mini Dashboard Tâches</h1>
+    <p>Ajoute, archive, copie et retrace l’histoire de tes tâches.</p>
+  </header>
+
+  <main>
+    <!-- Section input + boutons -->
+    <section class="input-section">
+      <input type="text" id="taskInput" placeholder="Ex : appeler le fournisseur, revoir le doc...">
+      <div class="buttons-row">
+        <button id="addBtn">➕ Ajouter</button>
+        <button id="archiveBtn">📦 Archiver</button>
+      </div>
+
+      <div class="upload-panel">
+        <h2>📂 Upload JSON</h2>
+        <input type="file" id="uploadJson" multiple accept=".json">
+      </div>
+    </section>
+
+    <!-- Sidebar : Prompts + Historique -->
+    <aside class="task-list">
+      <div class="prompt-panel">
+        <h2>⚡ Prompts</h2>
+        <div id="promptsContainer"></div>
+      </div>
+
+      <h2>📝 Historique des tâches</h2>
+      <ul id="tasksContainer"></ul>
+    </aside>
+
+    <!-- Message Copié -->
+    <div id="copiedMsg" class="copied-msg" style="display:none;">✅ Copié dans le presse-papier !</div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
