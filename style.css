@@ -52,45 +52,12 @@ main {
   background: #357ABD;
 }
 
-.task-list {
-  flex: 1;
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  max-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  overflow-y: auto;
-}
-
-.task-list ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.task-list li {
-  padding: 8px;
-  border-bottom: 1px solid #eee;
-}
-
-.upload-panel {
-  margin-top: 20px;
-}
-
-.upload-panel input {
-  padding: 5px;
-}
-
-/* Panel Prompts : centré, orange, rectangles */
 .prompt-panel {
   display: flex;
   flex-direction: column;
   align-items: center; /* centrer boutons */
   gap: 15px;
-  margin-bottom: 15px;
+  margin-top: 10px;
 }
 
 .prompt-panel button {
@@ -108,6 +75,35 @@ main {
 
 .prompt-panel button:hover {
   background: #e0693f; /* hover plus foncé */
+}
+
+.upload-panel {
+  margin-top: 20px;
+}
+
+.upload-panel input {
+  padding: 5px;
+}
+
+.task-list {
+  flex: 1;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.task-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.task-list li {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
 }
 
 .copied-msg {
