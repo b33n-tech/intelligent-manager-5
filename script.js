@@ -20,6 +20,7 @@ function renderTasks() {
       const li = document.createElement("li");
       li.className = "task-item";
 
+      // Texte de la tâche
       const taskText = document.createElement("div");
       taskText.className = "task-text";
       taskText.textContent = task.text + " (ajoutée le " + task.date.split("T")[0] + ")";
@@ -29,13 +30,16 @@ function renderTasks() {
       const commentSection = document.createElement("div");
       commentSection.className = "comment-section";
 
+      // Liste des commentaires existants
       const commentList = document.createElement("ul");
       commentList.className = "comment-list";
-      task.comments?.forEach(c=> {
-        const cLi = document.createElement("li");
-        cLi.textContent = c;
-        commentList.appendChild(cLi);
-      });
+      if(task.comments?.length){
+        task.comments.forEach(c=> {
+          const cLi = document.createElement("li");
+          cLi.textContent = c;
+          commentList.appendChild(cLi);
+        });
+      }
       commentSection.appendChild(commentList);
 
       // Input commentaire
@@ -46,6 +50,7 @@ function renderTasks() {
       const commentBtn = document.createElement("button");
       commentBtn.textContent = "+";
 
+      // Ajouter le commentaire
       commentBtn.addEventListener("click", ()=>{
         const val = commentInput.value.trim();
         if(val!==""){
@@ -132,7 +137,7 @@ uploadJson.addEventListener("change", event=>{
         if(Array.isArray(data)){
           data.forEach(item=>{
             if(item.text && item.date){
-              if(!item.comments) item.comments=[];
+              if(!item.comments) item.comments = [];
               tasks.push({text:item.text, date:item.date, comments:item.comments});
             }
           });
